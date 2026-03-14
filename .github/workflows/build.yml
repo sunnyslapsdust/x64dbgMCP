@@ -1,0 +1,35 @@
+name: Build x64dbgMCP
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:   # allows manual trigger from GitHub UI
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure CMake (x64)
+        run: cmake -S . -B build64 -A x64
+
+      - name: Build (x64)
+        run: cmake --build build64 --target all_plugins --config Release
+
+      - name: Configure CMake (x32)
+        run: cmake -S . -B build32 -A Win32 -DBUILD_BOTH_ARCHES=OFF
+
+      - name: Build (x32)
+        run: cmake --build build32 --config Release
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: x64dbgMCP-plugins
+          path: |
+            build64/**/*.dp64
+            build32/**/*.dp32
+          retention-days: 7
