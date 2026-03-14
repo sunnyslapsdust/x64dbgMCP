@@ -24,6 +24,6 @@ jobs:
         with:
           name: x64dbgMCP-plugins
           path: |
-            build64/**/*.dp64
-            build32/**/*.dp32
+            build/**/*.dp64
+            build/**/*.dp32
           retention-days: 7
